@@ -27,9 +27,11 @@ const GalleryCard = (images) => {
           isHovered ? "opacity-80" : "opacity-0"
         }`}
       >
-        <span className="text-white text-center">
-          <h3 className="text-lg font-bold">{images.photographer}</h3>
-          <Link href={images.url}>{images.url}</Link>
+        <span className="text-indigo-600 p-4">
+          <h3 className="text-lg font-extrabold ">{images.photographer}</h3>
+          <Link to={images.url} target="_blank">
+            view more
+          </Link>
         </span>
       </div>
     </section>

@@ -1,13 +1,20 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useDrag } from "react-dnd";
-import { ItemTypes } from "./constants";
+import { useDrag, useDrop } from "react-dnd";
 
-const GalleryCard = (images, index, moveImage) => {
-  const [, ref] = useDrag({
-    type: ItemTypes.IMAGE,
-    item: { index },
-  });
+const GalleryCard = ({
+  image,
+  index,
+  dragItemIndex,
+  dragOverItemIndex,
+  handleDragStart,
+  handleDragOver,
+  handleDrop,
+  handleDragEnter,
+  handleDragLeave,
+  handleDragEnd,
+}) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseEnter = () => {
@@ -18,15 +25,27 @@ const GalleryCard = (images, index, moveImage) => {
     setIsHovered(false);
   };
 
+  // const cardStyles = {
+  //   transform: isDragging ? "scale(0.9)" : "scale(1)",
+  //   transition: isDragging ? "transform 0.3s ease-in-out" : "none",
+  // };
+
   return (
     <section
       className="relative transition-transform hover:scale-105 cursor-move"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      ref={ref}
+      draggable
+      onDragStart={() => handleDragStart(index)}
+      onDragOver={handleDragOver}
+      onDrop={() => handleDrop(dragItemIndex, dragOverItemIndex, image)}
+      onDragEnter={() => handleDragEnter(index)}
+      onDragLeave={handleDragLeave}
+      onDragEnd={handleDragEnd}
+      // style={cardStyles}
     >
       <div className="border-2 rounded bg-black">
-        <img src={images.src.portrait} alt={images.photographer} />
+        <img src={image.src.portrait} alt={image.photographer} />
       </div>
 
       <div
@@ -35,8 +54,8 @@ const GalleryCard = (images, index, moveImage) => {
         }`}
       >
         <span className="text-indigo-600 p-4">
-          <h3 className="text-lg font-extrabold ">{images.photographer}</h3>
-          <Link to={images.url} target="_blank">
+          <h3 className="text-lg font-extrabold ">{image.photographer}</h3>
+          <Link to={image.url} target="_blank">
             view more
           </Link>
         </span>

@@ -5,10 +5,12 @@ import * as Yup from "yup";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { UseUserAuth } from "../../context/authContext";
 import { useNavigate } from "react-router-dom";
+import Loading from "../common/Loading";
 
 const SignupForm = () => {
-  const createUser = UseUserAuth();
+  const { createUser } = UseUserAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -38,13 +40,14 @@ const SignupForm = () => {
 
   const onSubmit = async (values) => {
     const { email, password } = values;
+    setLoading(true);
     try {
       console.log("Form data", values);
       await createUser(email, password);
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       console.error("FIREBASE error", error.message);
-      alert(error.response.data);
+      setLoading(false);
     }
   };
 
@@ -99,7 +102,7 @@ const SignupForm = () => {
               disabled={!formik.isValid}
               className="border bg-indigo-500  rounded py-1 px-4 w-full text-white my-4 cursor-pointer hover:bg-indigo-800"
             >
-              Sign up
+              {loading ? <Loading /> : "Sign up"}
             </button>
           </Form>
         );

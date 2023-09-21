@@ -2,12 +2,12 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_API_KEY,
-  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_APP_ID,
+  apiKey: "AIzaSyCYj-KLn0-2KaJSQAE4jrKAXfiWSG4DX8Y",
+  authDomain: "gallery-glimpse-b582f.firebaseapp.com",
+  projectId: "gallery-glimpse-b582f",
+  storageBucket: "gallery-glimpse-b582f.appspot.com",
+  messagingSenderId: "108908469283",
+  appId: "1:108908469283:web:f76d023ce12afbc87ce596",
 };
 
 // Initialize Firebase

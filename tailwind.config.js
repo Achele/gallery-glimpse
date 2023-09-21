@@ -22,6 +22,9 @@ export default {
         "2xl": "1536px",
         // => @media (min-width: 1536px) { ... }
       },
+      backgroundImage: {
+        "hero-background": "url('/hero.jpg')",
+      },
     },
   },
   plugins: [],

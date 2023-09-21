@@ -1,3 +1,6 @@
+import { useState, useEffect } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { useParams, useNavigate } from "react-router-dom";
 import Loading from "../components/common/Loading";
 import GalleryCard from "../components/GalleryCard";
@@ -10,13 +13,51 @@ const SearchResult = () => {
   const { loading, data, error } = useFetch(searchUrl);
   // console.log(data);
 
+  const [images, setImages] = useState([]);
+  const [dragItemIndex, setDragItemIndex] = useState();
+  const [dragOverItemIndex, setDragOverItemIndex] = useState();
+
+  const handleDragStart = (index) => {
+    setDragItemIndex(index);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  const handleDrop = (draggedIndex, targetIndex, draggedImage) => {
+    const _images = [...images];
+    const dragItem = _images.splice(draggedIndex, 1)[0];
+    _images.splice(targetIndex, 0, dragItem);
+    setImages(_images);
+  };
+
+  const handleDragEnter = (index) => {
+    setDragOverItemIndex(index);
+  };
+
+  const handleDragLeave = (event) => {
+    setDragOverItemIndex(undefined);
+  };
+
+  const handleDragEnd = (event) => {
+    setDragItemIndex(undefined);
+    setDragOverItemIndex(undefined);
+  };
+
+  useEffect(() => {
+    if (data) {
+      setImages(data);
+    }
+  }, [data]);
+
   const navigate = useNavigate();
 
   const handleClick = () => {
     navigate(-1);
   };
 
-  console.log("SEARCH images: ", data);
+  console.log("SEARCH images: ", images);
 
   return (
     <section className="flex flex-col   p-8 mx-10 rounded-lg">
@@ -32,11 +73,30 @@ const SearchResult = () => {
         Search Results for <span className="text-gray-400">{`"${query}"`}</span>
       </h2>
       {loading && <Loading />}
-      <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-12">
-        {data.map((images) => (
-          <GalleryCard key={images.id} {...images} />
-        ))}
-      </section>
+      {error && <p>Error: {error.message}</p>}
+      {!loading && !error && (
+        <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-12">
+          <DndProvider backend={HTML5Backend}>
+            {images.map((image, index) => {
+              return (
+                <GalleryCard
+                  key={image.id}
+                  image={image}
+                  index={index}
+                  dragItemIndex={dragItemIndex}
+                  dragOverItemIndex={dragOverItemIndex}
+                  handleDragStart={handleDragStart}
+                  handleDragOver={handleDragOver}
+                  handleDrop={handleDrop}
+                  handleDragEnter={handleDragEnter}
+                  handleDragLeave={handleDragLeave}
+                  handleDragEnd={handleDragEnd}
+                />
+              );
+            })}
+          </DndProvider>
+        </section>
+      )}
     </section>
   );
 };

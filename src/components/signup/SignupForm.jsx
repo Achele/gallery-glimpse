@@ -3,15 +3,21 @@ import { Form, Formik } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
+import { UseUserAuth } from "../../context/authContext";
+import { useNavigate } from "react-router-dom";
 
 const SignupForm = () => {
+  const createUser = UseUserAuth();
   const [showPassword, setShowPassword] = useState(false);
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  const navigate = useNavigate();
   const initialValues = {
     email: "",
     password: "",
+    confirmPassword: "",
   };
 
   const validationSchema = Yup.object({
@@ -25,10 +31,21 @@ const SignupForm = () => {
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+/,
         "Password must contain one digit, one lowercase letter, one uppercase letter, and one special character"
       ),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("password"), ""], "Passwords must match")
+      .required("Required"),
   });
 
-  const onSubmit = (values) => {
-    console.log(values);
+  const onSubmit = async (values) => {
+    const { email, password } = values;
+    try {
+      console.log("Form data", values);
+      await createUser(email, password);
+      navigate("/login");
+    } catch (error) {
+      console.error("FIREBASE error", error.message);
+      alert(error.response.data);
+    }
   };
 
   return (
@@ -61,12 +78,28 @@ const SignupForm = () => {
                 {showPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
               </span>
             </div>
+
+            <div className="relative">
+              <FormikControl
+                control="input"
+                type={showPassword ? "text" : "password"}
+                placeholder="Retype Password"
+                name="confirmPassword"
+              />
+              <span
+                onClick={toggleShowPassword}
+                className="absolute right-0  top-5 md:top-6   flex items-center pr-3 cursor-pointer"
+              >
+                {showPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+              </span>
+            </div>
+
             <button
               type="submit"
               disabled={!formik.isValid}
               className="border bg-indigo-500  rounded py-1 px-4 w-full text-white my-4 cursor-pointer hover:bg-indigo-800"
             >
-              Log in
+              Sign up
             </button>
           </Form>
         );

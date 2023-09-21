@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import LoginForm from "./LoginForm";
 
 const LoginFormContainer = () => {
@@ -15,12 +16,12 @@ const LoginFormContainer = () => {
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <p className=" text-center text-md text-gray-500 mt-4">
           Dont have an account?
-          {/* <link
-            href="/signup"
+          <Link
+            to="/signup"
             className="font-semibold ml-1 text-primary hover:text-indigo-500"
           >
             Sign Up
-          </link> */}
+          </Link>
         </p>
       </div>
     </main>

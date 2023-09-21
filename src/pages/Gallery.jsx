@@ -6,8 +6,6 @@ import { UseUserAuth } from "../context/authContext";
 import useFetch from "../hooks/useFetch";
 
 const Gallery = () => {
-  //   const API_KEY = "QcQ4xKb1dLax6dKMAmm91nlWS3VozNJevDf56WBkNzuDESChpjfySdo2";
-  //   const url = `https://api.pexels.com/v1/curated?per_page=10`;
   const url = `https://api.pexels.com/v1/curated?per_page=12`;
 
   const { loading, data, error } = useFetch(url);

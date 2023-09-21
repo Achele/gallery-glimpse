@@ -3,12 +3,18 @@ import { Form, Formik } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
+import { UseUserAuth } from "../../context/authContext";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  const signIn = UseUserAuth();
+  const navigate = useNavigate();
+
   const initialValues = {
     email: "",
     password: "",
@@ -27,8 +33,14 @@ const LoginForm = () => {
       ),
   });
 
-  const onSubmit = (values) => {
-    console.log(values);
+  const onSubmit = async (values) => {
+    const { email, password } = values;
+    try {
+      await signIn(email, password);
+      navigate("/gallery");
+    } catch (error) {
+      console.error("FIREBASE error", error);
+    }
   };
 
   return (

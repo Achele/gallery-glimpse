@@ -5,14 +5,16 @@ import * as Yup from "yup";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { UseUserAuth } from "../../context/authContext";
 import { useNavigate } from "react-router-dom";
+import Loading from "../common/Loading";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const signIn = UseUserAuth();
+  const { signIn } = UseUserAuth();
   const navigate = useNavigate();
 
   const initialValues = {
@@ -35,11 +37,13 @@ const LoginForm = () => {
 
   const onSubmit = async (values) => {
     const { email, password } = values;
+    setLoading(true);
     try {
       await signIn(email, password);
       navigate("/gallery");
     } catch (error) {
       console.error("FIREBASE error", error);
+      setLoading(false);
     }
   };
 
@@ -78,7 +82,7 @@ const LoginForm = () => {
               disabled={!formik.isValid}
               className="border bg-indigo-500  rounded py-1 px-4 w-full text-white my-4 cursor-pointer hover:bg-indigo-800"
             >
-              Log in
+              {loading ? <Loading className={"w-5"} /> : "Log in"}
             </button>
           </Form>
         );

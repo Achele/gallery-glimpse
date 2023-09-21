@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDrag } from "react-dnd";
+import { ItemTypes } from "./constants";
 
-const GalleryCard = (images) => {
+const GalleryCard = (images, index, moveImage) => {
+  const [, ref] = useDrag({
+    type: ItemTypes.IMAGE,
+    item: { index },
+  });
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseEnter = () => {
@@ -14,9 +20,10 @@ const GalleryCard = (images) => {
 
   return (
     <section
-      className="relative transition-transform hover:scale-105 "
+      className="relative transition-transform hover:scale-105 cursor-move"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      ref={ref}
     >
       <div className="border-2 rounded bg-black">
         <img src={images.src.portrait} alt={images.photographer} />
@@ -39,6 +46,11 @@ const GalleryCard = (images) => {
 };
 
 export default GalleryCard;
+
+//
+/**
+ * ======== RECENT ONE
+ */
 
 // // import { useState } from "react";
 // // import { useDrag } from "react-dnd";

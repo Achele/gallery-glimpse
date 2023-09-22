@@ -8,6 +8,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 import { useState, useEffect } from "react";
+import Queries from "../components/Queries";
 
 const Gallery = () => {
   const url = `https://api.pexels.com/v1/curated?per_page=12`;
@@ -74,6 +75,7 @@ const Gallery = () => {
           Log out
         </button>
       </div>
+      <Queries />
       <section className="w-4/5 my-0 mx-auto py-8 px-20">
         <DndProvider backend={HTML5Backend}>
           {loading && <Loading />}
